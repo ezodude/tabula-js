@@ -39,20 +39,12 @@ const path          = require('path')
     , _             = require('lodash')
     , h             = require('highland');
 
-function TabulaCommand(pdfPath){
+function TabulaCommand(pdfPath, commandArgs){
   EventEmitter.call(this);
-  this.pdfPath = pdfPath;
+  this._build(pdfPath, commandArgs);
 }
 
 util.inherits(TabulaCommand, EventEmitter)
-
-TabulaCommand.prototype.build = function (commandArgs) {
-  this.args = ['-jar', path.join(__dirname, 'lib', 'tabula-java.jar')];
-  this.args = this.args.concat(_.toPairs(_.mapKeys(commandArgs, (value, key) => `--${_.kebabCase(key)}`)));
-  this.args = this.args.concat([this.pdfPath]);
-  this.args = _.flatten(this.args);
-  return this;
-};
 
 TabulaCommand.prototype.run = function () {
   this.process = spawn('java', this.args);
@@ -68,6 +60,14 @@ TabulaCommand.prototype.run = function () {
   return this;
 };
 
+TabulaCommand.prototype._build = function (pdfPath, commandArgs) {
+  this.args = ['-jar', path.join(__dirname, 'lib', 'tabula-java.jar')];
+  this.args = this.args.concat(_.toPairs(_.mapKeys(commandArgs, (value, key) => `--${_.kebabCase(key)}`)));
+  this.args = this.args.concat([pdfPath]);
+  this.args = _.flatten(this.args);
+  return this;
+};
+
 module.exports = Tabula;
 
 function Tabula(pdfPath, options) {
@@ -77,7 +77,9 @@ function Tabula(pdfPath, options) {
 }
 
 Tabula.prototype.streamCsv = function () {
-  new TabulaCommand(this.pdfPath).build(this.options).run().on('data', data => console.log(`Event ----${data}----`));
+  new TabulaCommand(this.pdfPath, this.options)
+  .run()
+  .on('data', data => console.log(`Event ----${data}----`));
 };
 
 
