@@ -84,8 +84,5 @@ Tabula.prototype.streamCsv = function () {
   const dataStream = h('data', cmd);
   const errorStream = h('error', cmd);
 
-  this.stream = h.concat(errorStream, dataStream);
-  return this.stream
-  .doto(data => console.log('INCOMING -> ', data))
-  .stopOnError(e => console.error(e));
+  return h.concat(errorStream, dataStream).stopOnError(e => console.error(e));
 };
