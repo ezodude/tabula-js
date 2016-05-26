@@ -55,7 +55,10 @@ TabulaCommand.prototype.run = function () {
     if(/error/i.test(msg)){ return this.emit('error', new Error(`tabula-java ${msg}`)); }
   });
 
-  this.process.on('close', (code) => this.emit('close', code));
+  this.process.on('close', (code) => {
+    this.emit('data', h.nil);
+    this.emit('close', code);
+  });
   this.process.on('error', (err) => this.emit('error', err));
   return this;
 };
@@ -77,9 +80,12 @@ function Tabula(pdfPath, options) {
 }
 
 Tabula.prototype.streamCsv = function () {
-  new TabulaCommand(this.pdfPath, this.options)
-  .run()
-  .on('data', data => console.log(`Event ----${data}----`));
+  const cmd = new TabulaCommand(this.pdfPath, this.options).run();
+  const dataStream = h('data', cmd);
+  const errorStream = h('error', cmd);
+
+  this.stream = h.concat(errorStream, dataStream);
+  return this.stream
+  .doto(data => console.log('INCOMING -> ', data))
+  .stopOnError(e => console.error(e));
 };
-
-
