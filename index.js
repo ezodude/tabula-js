@@ -55,11 +55,8 @@ TabulaCommand.prototype.run = function () {
     if(/error/i.test(msg)){ return this.emit('error', new Error(`tabula-java ${msg}`)); }
   });
 
-  this.process.on('close', (code) => {
-    this.emit('data', h.nil);
-    this.emit('close', code);
-  });
-  this.process.on('error', (err) => this.emit('error', err));
+  this.process.on('close', code => this.emit('close', code));
+  this.process.on('error', err => this.emit('error', err));
   return this;
 };
 
@@ -84,5 +81,11 @@ Tabula.prototype.streamCsv = function () {
   const dataStream = h('data', cmd);
   const errorStream = h('error', cmd);
 
-  return h.concat(errorStream, dataStream).stopOnError(e => console.error(e));
+  const stream = h.concat(errorStream, dataStream).errors((err, push) => push(err));
+  cmd.on('close', code => stream.end());
+  return stream;
+};
+
+Tabula.prototype.extractCsv = function (cb) {
+  this.streamCsv().collect().toCallback(cb);
 };
