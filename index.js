@@ -44,6 +44,8 @@ Tabula.prototype.streamCsv = function () {
 
 Tabula.prototype.extractCsv = function (cb) {
   this.streamCsv()
+  .map(data => data.toString())
+  .split()
   .collect()
   .stopOnError(err => cb(err, null))
   .each(data => cb(null, data));
