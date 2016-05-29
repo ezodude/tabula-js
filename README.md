@@ -86,3 +86,7 @@ stream
 .doto(console.log)
 .done(() => console.log('ALL DONE!'));
 ```
+
+## Thank yous
+
+This library would not be possible without the amazing effort of the [tabula-java](https://github.com/tabulapdf/tabula-java) team. Thank you!
