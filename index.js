@@ -37,7 +37,8 @@ const path          = require('path')
     , spawn         = require('child_process').spawn
     , EventEmitter  = require('events').EventEmitter
     , _             = require('lodash')
-    , h             = require('highland');
+    , h             = require('highland')
+    , hp            = require('highland-process');
 
 function TabulaCommand(pdfPath, commandArgs){
   EventEmitter.call(this);
@@ -47,17 +48,7 @@ function TabulaCommand(pdfPath, commandArgs){
 util.inherits(TabulaCommand, EventEmitter)
 
 TabulaCommand.prototype.run = function () {
-  this.process = spawn('java', this.args);
-
-  this.process.stdout.on('data', data => this.emit('data', data.toString()));
-  this.process.stderr.on('data', data => {
-    const msg = data.toString();
-    if(/error/i.test(msg)){ return this.emit('error', new Error(`tabula-java ${msg}`)); }
-  });
-
-  this.process.on('close', code => this.emit('close', code));
-  this.process.on('error', err => this.emit('error', err));
-  return this;
+  return spawn('java', this.args);
 };
 
 TabulaCommand.prototype._build = function (pdfPath, commandArgs) {
@@ -77,13 +68,7 @@ function Tabula(pdfPath, options) {
 }
 
 Tabula.prototype.streamCsv = function () {
-  const cmd = new TabulaCommand(this.pdfPath, this.options).run();
-  const dataStream = h('data', cmd);
-  const errorStream = h('error', cmd);
-
-  const stream = h.concat(errorStream, dataStream).errors((err, push) => push(err));
-  cmd.on('close', code => stream.end());
-  return stream;
+  return hp.from(new TabulaCommand(this.pdfPath, this.options).run());
 };
 
 Tabula.prototype.extractCsv = function (cb) {

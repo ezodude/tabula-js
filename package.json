@@ -25,6 +25,7 @@
   "homepage": "https://github.com/ezodude/tabula-js#readme",
   "dependencies": {
     "highland": "^2.8.1",
+    "highland-process": "^1.0.5",
     "lodash": "^4.13.1"
   }
 }
