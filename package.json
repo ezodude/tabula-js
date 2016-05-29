@@ -1,6 +1,6 @@
 {
   "name": "tabula-js",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "description": "Node wrapper for tabula-java 0.9.0, a library/CLI for extracting tables from PDF files.",
   "main": "index.js",
   "scripts": {
