@@ -27,33 +27,8 @@
 //
 // useLineReturns       Use embedded line returns in cells. (Only in spreadsheet mode.)
 
-
-// const tabula = require('tabula-js');
-
-// tabula.streamCsv('pathToPDF');
-// tabula.extractCsv('pathToPDF', cb);
-
-const path          = require('path')
-    , spawn         = require('child_process').spawn
-    , _             = require('lodash')
-    , h             = require('highland')
+const cmd           = require('./lib/cmd')
     , hp            = require('highland-process');
-
-function TabulaCommand(pdfPath, commandArgs){
-  this._build(pdfPath, commandArgs);
-}
-
-TabulaCommand.prototype.run = function () {
-  return spawn('java', this.args);
-};
-
-TabulaCommand.prototype._build = function (pdfPath, commandArgs) {
-  this.args = ['-jar', path.join(__dirname, 'lib', 'tabula-java.jar')];
-  this.args = this.args.concat(_.toPairs(_.mapKeys(commandArgs, (value, key) => `--${_.kebabCase(key)}`)));
-  this.args = this.args.concat([pdfPath]);
-  this.args = _.flatten(this.args);
-  return this;
-};
 
 module.exports = Tabula;
 
@@ -64,7 +39,7 @@ function Tabula(pdfPath, options) {
 }
 
 Tabula.prototype.streamCsv = function () {
-  return hp.from(new TabulaCommand(this.pdfPath, this.options).run());
+  return hp.from(cmd(this.pdfPath, this.options).run());
 };
 
 Tabula.prototype.extractCsv = function (cb) {
