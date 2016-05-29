@@ -72,5 +72,8 @@ Tabula.prototype.streamCsv = function () {
 };
 
 Tabula.prototype.extractCsv = function (cb) {
-  this.streamCsv().collect().toCallback(cb);
+  this.streamCsv()
+  .collect()
+  .stopOnError(err => cb(err, null))
+  .each(data => cb(null, data));
 };
