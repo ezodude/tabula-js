@@ -13,9 +13,7 @@
   "keywords": [
     "pdf",
     "csv",
-    "json",
-    "pdf to csv",
-    "pdf to json"
+    "pdf to csv"
   ],
   "author": "Ezo Saleh <npm@ezosaleh.com> (http://ezosaleh.com/)",
   "license": "MIT",
