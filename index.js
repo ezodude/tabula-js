@@ -35,17 +35,13 @@
 
 const path          = require('path')
     , spawn         = require('child_process').spawn
-    , EventEmitter  = require('events').EventEmitter
     , _             = require('lodash')
     , h             = require('highland')
     , hp            = require('highland-process');
 
 function TabulaCommand(pdfPath, commandArgs){
-  EventEmitter.call(this);
   this._build(pdfPath, commandArgs);
 }
-
-util.inherits(TabulaCommand, EventEmitter)
 
 TabulaCommand.prototype.run = function () {
   return spawn('java', this.args);
