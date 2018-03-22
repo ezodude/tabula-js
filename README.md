@@ -13,6 +13,8 @@ Options:
 
 area <AREA>           Portion of the page to analyze (top,left,bottom,right).
                        Example: "269.875,12.75,790.5,561". Default is entire page.
+                       If there are multiple areas to analyze:
+                       Example: ["269.875,12.75,790.5,561", "132.45,23.2,256.3,534"]
 
 columns <COLUMNS>     X coordinates of column boundaries. Example 
                       "10.1,20.2,30.3"
