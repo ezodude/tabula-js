@@ -6,7 +6,7 @@ Helps you extract CSV data tables from PDF files. It's a node wrapper for the mi
 
 Not all [tabula-java options](https://github.com/tabulapdf/tabula-java#usage-examples) are exposed. Particularly wirting to file but any extracted data is available through a callback or a stream.
 
-Here are the options:
+Here are the options (for options with no value, pass `true` as the value):
 
 ```
 Options:
