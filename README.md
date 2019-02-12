@@ -1,6 +1,8 @@
 # tabula-js
 
-Helps you extract CSV data tables from PDF files. It's a node wrapper for the mighty [tabula-java](https://github.com/tabulapdf/tabula-java) 0.9.0.
+__PLEASE NOTE__ I AM NOT ACTIVELY MAINTAINING THIS REPO - however, I am humbled by all the interest and PRs to date.
+
+Helps you extract CSV data tables from PDF files. It's a node wrapper for the mighty [tabula-java](https://github.com/tabulapdf/tabula-java) 1.0.2.
 
 ## Options
 
